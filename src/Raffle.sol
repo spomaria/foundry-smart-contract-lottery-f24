@@ -68,7 +68,7 @@ contract Raffle is VRFConsumerBaseV2 {
     address private s_recentWinner;
     RaffleState private s_raffleState;
     /** Events */
-    event EnteredRafle(address indexed player);
+    event EnteredRaffle(address indexed player);
     event PickedWinner(address indexed winner);
 
     /** Modifiers */
@@ -92,8 +92,7 @@ contract Raffle is VRFConsumerBaseV2 {
         address vrfCoordinator,
         bytes32 gasLane,
         uint64 subscriptionId,
-        uint32 callbackGasLimit,
-        RaffleState raffleState
+        uint32 callbackGasLimit
     ) VRFConsumerBaseV2(vrfCoordinator){
         i_entranceFee = entranceFee;
         i_interval = interval;
@@ -102,7 +101,7 @@ contract Raffle is VRFConsumerBaseV2 {
         i_gasLane = gasLane;
         i_subscriptionId = subscriptionId;
         i_callbackGasLimit = callbackGasLimit;
-        s_raffleState = raffleState;
+        s_raffleState = RaffleState.OPEN;
     }
 
     // CEI: Checks, Effects, Interactions
@@ -114,7 +113,7 @@ contract Raffle is VRFConsumerBaseV2 {
         // add message sender to array of players
         s_players.push(payable(msg.sender));
         // emit the event
-        emit EnteredRafle(msg.sender);
+        emit EnteredRaffle(msg.sender);
 
         // Interactions (With other Contracts -> None)
     }
@@ -206,5 +205,13 @@ contract Raffle is VRFConsumerBaseV2 {
     /** Getter Functions */
     function getEntranceFee() external view returns(uint256){
         return i_entranceFee;
+    }
+
+    function getRaffleState() external view returns(RaffleState){
+        return s_raffleState;
+    }
+
+    function getPlayer(uint256 indexOfPlayer) external view returns(address){
+        return s_players[indexOfPlayer];
     }
 }

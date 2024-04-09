@@ -34,3 +34,48 @@ out = "out"
 libs = ["lib"]
 remappings = ["@chainlink/contracts/src/v0.8/vrf=lib/chainlink-brownie-contracts/contracts/src/v0.8"]
 ```
+
+## Tests
+1. We write some deploy scripts
+```bash
+touch ./script/DeployRaffle.s.sol
+```
+Because the constructor function of `Raffle` contract in our `Raffle.sol` takes input parameters some of which depend on the chain we wish to deploy the contract to, we create a `HelperConfig` file using the following command
+```bash
+touch ./script/HelperConfig.s.sol
+```
+The `HelperConfig` file is to make our deployment flexible and modular.
+
+We create a mock VRF Coordinator for our Anvil chain by importing the mock script in the chainlink brownie contracts directory thus
+```bash
+import { VRFCoordinatorV2Mock } from "@chainlink-brownie-contracts/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol";
+```
+
+
+2. We write some tests
+    1. Work on local chain
+    2. Work on forked Testnet
+    3. Work on forked Mainnet
+
+### Unit Test
+For our unit test, we create a `RaffleTest.t.sol` file using the command 
+```bash
+mkdir ./test/unit && touch ./test/unit/RaffleTest.t.sol
+```
+
+To run a test, use the following command 
+```bash
+forge test
+```
+
+To check the test coverage, use the following command
+```bash
+forge coverage
+```
+
+
+### Integration Test
+For our integration test, we create a `IntegrationTest.t.sol` file inside the `integration` directory using the command 
+```bash
+mkdir ./test/integration && touch ./test/integration/IntegrationTest.t.sol
+```
