@@ -57,6 +57,18 @@ import { VRFCoordinatorV2Mock } from "@chainlink-brownie-contracts/contracts/src
     2. Work on forked Testnet
     3. Work on forked Mainnet
 
+### Link Tokens for Chainlink Subscription
+The `LinkToken.sol` file in `test/mocks` directory was created to enable us fund our subscription. Use the following command to download dependency files for the `LinkToken.sol`
+```bash
+forge install transmissions11/solmate --no-commit
+```
+
+We then edit `remappings` in our `foundry.toml` file to enable us pick the dependency on our local machine without changing the file path on our `LinkToken.sol` file. Our `remappings` now become
+
+```
+remappings = ["@chainlink/contracts/src/v0.8/vrf=lib/chainlink-brownie-contracts/contracts/src/v0.8", "@solmate=lib/solmate/src"]
+```
+
 ### Unit Test
 For our unit test, we create a `RaffleTest.t.sol` file using the command 
 ```bash
@@ -79,3 +91,26 @@ For our integration test, we create a `IntegrationTest.t.sol` file inside the `i
 ```bash
 mkdir ./test/integration && touch ./test/integration/IntegrationTest.t.sol
 ```
+
+### Makefile
+The Makefile enables us to name our frequently used commands so that we don't have to always type a lengthy command. We create the Makefile using the command
+```bash
+touch Makefile
+```
+In our Makefile, we paste the following lines of code
+```
+-include .env
+
+build:; forge build
+
+fund-subscription:
+	forge script script/Interactions.s.sol:FundSubscription --rpc-url $(SEPOLIA_RPC_URL) --private-key $(PRIVATE_KEY) --broadcast -vvvv
+
+deploy-sepolia:
+	forge script script/DeployRaffle.s.sol:DeployRaffle --rpc-url $(SEPOLIA_RPC_URL) --private-key $(PRIVATE_KEY) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
+```
+Now, instead of typing it the lengthy command in order to fund our subscription on Chainlink, we use the following command
+```
+make fund-subscription
+```
+which will call the necessary command and have the task executed.
