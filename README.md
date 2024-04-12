@@ -69,6 +69,11 @@ We then edit `remappings` in our `foundry.toml` file to enable us pick the depen
 remappings = ["@chainlink/contracts/src/v0.8/vrf=lib/chainlink-brownie-contracts/contracts/src/v0.8", "@solmate=lib/solmate/src"]
 ```
 
+To download dependencies that will enable us add consumer to our subscription, we run the following command
+```bash
+forge install ChainAccelOrg/foundry-devops --no-commit
+```
+
 ### Unit Test
 For our unit test, we create a `RaffleTest.t.sol` file using the command 
 ```bash
@@ -85,6 +90,10 @@ To check the test coverage, use the following command
 forge coverage
 ```
 
+To check what aspects of our code we have not covered in our test, we run the following command
+```bash
+forge coverage --report debug > coverage.txt
+```
 
 ### Integration Test
 For our integration test, we create a `IntegrationTest.t.sol` file inside the `integration` directory using the command 
